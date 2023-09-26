@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Account Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #6a3093, #a044ff);
+            background-size: cover;
+            background-attachment: fixed;
+            color: #ffffff;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #6a3093;
+            color: white;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: auto;
+            height: auto;
+            max-width: 80px; /* Set a maximum width if needed */
+            max-height: 80px; /* Set a maximum height if needed */
+        }
+
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+          }
+          .nav-links li {
+            margin-right: 60px;
+          }
+          .nav-links a {
+            text-decoration: none;
+            color: #f7f2f2;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out;
+          }
+          .nav-links a:hover {
+            color: #e74c3c;
+          }
+        .container {
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 2.5rem;
+            color: #c9ff6b;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #c9ff6b;
+            color: #100f0f;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-secondary {
+            background-color: #c9ff6b;
+        }
+        .btn:hover {
+            background-color: #ff4f4f;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ffffff;
+            border-radius: 5px;
+            color: #100f0f;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #c9ff6b;
+            color: #100f0f;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #ff4f4f;
+        }
+
+        .upload-section {
+            background-color: #c9ff6b;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            margin-left: 400px;
+            margin-right: 400px;
+          }
+          .upload-section h1 {
+            color: #333333;
+            margin-bottom: 10px;
+          }
+          .upload-section input[type="file"] {
+            display: block;
+            margin: 10px auto;
+          }
+          .upload-section input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #3498db;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+          }
+          .upload-section input[type="submit"]:hover {
+            background-color: #2980b9;
+          }
+    </style>
+        <title>picky</title>
+        <link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', filename='logo.png') }}"/>
+    </head>
+    <div class="header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a id="about" href="/about">About</a></li>
+                <li><a id="contact" href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+<body>
+    {%set status = "User"%}
+    {%if user.state:%}
+    {%set status = "Admin"%}
+    {%endif%}
+    <div class="container">
+        <h1>User Account</h1>
+        <p>Welcome, {{ user.name}}!</p>
+        <p>Your account type: {{status}}</p>
+        <ul>
+            <li><strong>Username:</strong> {{user.name}}</li>
+            <li><strong>Email:</strong>{{ user.email }}</li>
+        </ul>
+        {%if user.state == False %}
+        <p>What would you like to do?</p>
+        <a id="labeling" href="/labeling/1" class="btn">Attach labels</a>
+        <a id="history" href="/history" class="btn btn-secondary">See labeling history</a>
+        {%endif%}
+        <a id="logout" href="/login" class="btn btn-secondary">Logout</a>
+    </div>
+    {%if user.state:%}
+    <!--
+    <form method="POST">
+        <label for="label">Label:</label>
+        <input type="text" id="label" name="label" required>
+        <button type="submit" name="submit_label">Add</button>
+    </form>
+
+    <form method="POST">
+        <label for="text">Comment:</label>
+        <input type="text" id="text" name="text" required>
+        <button type="submit" name="submit_text">Add</button>
+    </form>-->
+    <div class="upload-section">
+        <h1>Upload Labels</h1>
+        <form action="/upload_label" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" multiple />
+            <input type="submit" value="Upload Labels" />
+        </form>
+      </div>
+    
+      <div class="upload-section">
+        <h1>Upload Texts</h1>
+        <form action="/upload_text" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" multiple />
+            <input type="submit" value="Upload Texts" />
+        </form>
+      </div>
+    {%endif%}
+</body>
+</html>
