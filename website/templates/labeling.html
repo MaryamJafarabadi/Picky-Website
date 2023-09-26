@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Text Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e9a8fd, #fbab66);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #6a3093;
+            color: white;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: auto;
+            height: auto;
+            max-width: 80px; /* Set a maximum width if needed */
+            max-height: 80px; /* Set a maximum height if needed */
+        }
+
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+          }
+          .nav-links li {
+            margin-right: 60px;
+          }
+          .nav-links a {
+            text-decoration: none;
+            color: #f7f2f2;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out;
+          }
+          .nav-links a:hover {
+            color: #e74c3c;
+          }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 2.5rem;
+            color: #333;
+        }
+        #text-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch; /* Ensures equal height */
+            margin-top: 30px;
+        }
+        #context-box,
+        #main-text-box {
+            flex-basis: 50%; /* Equal width for both boxes */
+            border: 2px solid #eee;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 20px;
+            margin-left: 10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        p {
+            font-size: 1.4rem;
+            margin: 0;
+            line-height: 1.6;
+        }
+        #options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #ff6b6b;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: 20px;
+            margin-right: 38px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #ff4f4f;
+        }
+        #attach-label {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #label-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            font-size: 1.2rem;
+        }
+        #attach-button {
+            background-color: #6c757d;
+            margin-left: 10px;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: #fff;
+        }
+        #attach-button:hover {
+            background-color: #5a6268;
+        }
+        
+        #attach-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        #attach-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        #label-select {
+            width: 200px;
+            height: 40px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+
+        #attach-button {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #attach-button:hover {
+            background-color: #5a6268;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .item-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+
+    </style>
+    <title>picky</title>
+    <link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', filename='logo.png') }}"/>
+</head>
+<body>
+        <div class="header">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a id="userAccount" href="/user">home</a></li>
+                    <li><a id="about" href="/about">About</a></li>
+                    <li><a id="contact" href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="container">
+            <h1>Text Viewer</h1>
+            <div id="text-container">
+                <div id="context-box">
+                    <p id="context-text">Context: This is the context of the main text.</p>
+                </div>
+                <div id="main-text-box">
+                    <p id="main-text">{{text.context}}</p>
+                </div>
+            </div>
+            <div class="button-group">
+                {%if item_index == 1:%}
+                    {%set pre_item_index = total_items%}
+                {%else:%}
+                    {%set pre_item_index = item_index - 1%}
+                {%endif%}
+                {%if item_index == total_items:%}
+                    {%set next_item_index = 1%}
+                {%else:%}
+                    {%set next_item_index = item_index + 1%}
+                {%endif%}
+                <form method="POST" action="/labeling/{{ pre_item_index }}">
+                    <div id="options">
+                        <button type="submit" name="navigate" value="previous">Previous</button>
+                    </div>
+                </form>
+                <form method="POST" action="/labeling/{{ next_item_index }}">
+                    <div id="options">
+                        <button type="submit" name="navigate" value="next">Next</button>
+                    </div>
+                </form>
+            </div>
+            <div class="item-group">
+            <form method="POST">
+                <div id="attach-label">
+                    <select id="label-select" name="label">
+                        {% set i = 0 %}
+                        {% for label in labels:%}
+                        {% set i = i + 1 %}
+                            <option value={{ label.label }}>{{label.label}}</option>
+                        {%endfor%}
+                    </select>
+                    <input type="hidden" name="text" value={{text.id}}> <!---->
+                    <button type="submit" id="attach-button" name="attach">Attach</button>
+                </div>
+            </form>
+        </div>
+        </div>
+</body>
+</html>

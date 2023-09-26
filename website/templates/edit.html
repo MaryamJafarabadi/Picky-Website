@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editing Label</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(90deg, #74ebd5, #9face6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 50vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #222;
+            color: white;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: auto;
+            height: auto;
+            max-width: 80px;
+            max-height: 80px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-right: 60px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #f7f2f2;
+            font-weight: bold;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .nav-links a:hover {
+            color: #e74c3c;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .label-select {
+            width: 200px;
+            height: 40px;
+            border: 2px solid #222; /* Dark border color */
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 0 auto; /* Center-align the select bar */
+            padding: 5px;
+            background-color: #fff;
+            color: #222; /* Dark text color */
+        }
+
+        button {
+            background-color: #222; /* Dark button color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #111; /* Darker color on hover */
+        }
+
+        p {
+            margin-top: 20px;
+            color: #666;
+        }
+    </style>
+    <title>picky</title>
+    <link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', filename='logo.png') }}"/>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a id="userAccount" href="/user">home</a></li>
+                <li><a id="about" href="/about">About</a></li>
+                <li><a id="contact" href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <h1>Editing Label</h1>
+
+    <label for="labelSelect">Select another label:</label>
+    <form method="POST">
+    <select class="label-select" id="labelSelect" name="label">
+        {% set i = 0 %}
+        {% for label in labels:%}
+        {% set i = i + 1 %}
+            <option value={{ label.label }}>{{label.label}}</option>
+        {%endfor%}
+    </select>
+    <input type="hidden" name="label_info_id" value={{iid}}> <!---->
+    <button type="submit" id="attach-button" name="attach">Attach</button>
+</form>
+
+</body>
+</html>

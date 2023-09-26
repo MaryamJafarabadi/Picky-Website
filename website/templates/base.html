@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome to Our Website</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background-image: url("{{ url_for('static', filename='background-image.png') }}"); /* Replace with your image URL */
+    background-size: cover;
+    background-position: center;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  .logo {
+    width: auto;
+    height: auto;
+    max-width: 80px; /* Set a maximum width if needed */
+    max-height: 80px; /* Set a maximum height if needed */
+  }
+  .nav-links {
+    list-style: none;
+    display: flex;
+  }
+  .nav-links li {
+    margin-right: 60px;
+  }
+  .nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+  }
+  .nav-links a:hover {
+    color: #e74c3c;
+  }
+  .entrance-content {
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin-top: 250px;
+  }
+  .enter-button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease-in-out;
+  }
+  .enter-button:hover {
+    background-color: #2980b9;
+  }
+  .enter-button:active {
+    background-color: #1f6697;
+  }
+  .welcome-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 36px;
+    color: #e74c3c;
+    margin-bottom: 10px;
+  }
+  .description-text {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+</style>        
+      <title>picky</title>
+        <link rel="shortcut icon" type="image/jpg" href= "{{ url_for('static', filename='logo.png') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+    <nav>
+      <ul class="nav-links">
+        <li><a id="login" href="/login">Login</a></li>
+        <li><a id="contact" href="/contact">Contact</a></li>
+        <li><a id="about" href="/about">About</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="entrance-content">
+    <h1 class="welcome-text">Welcome to Our Website</h1>
+    <p class="description-text">Explore and discover amazing content!</p>
+  </div>
+  <a id="join" href="/join">  
+    <button class= "enter-button"> Click To Join</button>  
+  </a>
+
+</body>
+</html>
+
+
