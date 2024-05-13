@@ -5,6 +5,7 @@ from sqlalchemy.sql import func
 class Text(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     context = db.Column(db.String(20000), unique = True)
+    count = db.Column(db.Integer)###
 
 class Label(db.Model):
     label = db.Column(db.String(150), primary_key = True)
@@ -13,7 +14,7 @@ class LabelingInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     label = db.Column(db.String(150), db.ForeignKey('label.label'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    text = db.Column(db.String(10000), db.ForeignKey('text.context'))
+    text = db.Column(db.String(10000))#, db.ForeignKey('text.context'))
     date = db.Column(db.DateTime(timezone = True), default = func.now())
     
     

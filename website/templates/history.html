@@ -138,7 +138,7 @@
                 {% set text_context = labeling_info[n-1].text%}
   
                 <li class="content-li">
-                    <span class="label">{{ label_text }}<span class="tooltip">{{ text_context }}</span></span>
+                    <span class="label">{{ text_context }}<span class="tooltip">{{ label_text }}</span></span>
                     <form method="POST">
                         <div>
                             <input type="hidden" name="label_info" value={{labeling_info[n - 1].id}}> <!---->

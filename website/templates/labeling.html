@@ -214,22 +214,22 @@
                 </div>
             </div>
             <div class="button-group">
-                {%if item_index == 1:%}
-                    {%set pre_item_index = total_items%}
+                {%if item_index == 0:%}
+                    {%set pre_item_index = total_items - 1%}
                 {%else:%}
                     {%set pre_item_index = item_index - 1%}
                 {%endif%}
-                {%if item_index == total_items:%}
-                    {%set next_item_index = 1%}
+                {%if item_index == total_items - 1:%}
+                    {%set next_item_index = 0%}
                 {%else:%}
                     {%set next_item_index = item_index + 1%}
                 {%endif%}
-                <form method="POST" action="/labeling/{{ pre_item_index }}">
+                <form method="POST" action="/labeling/{{ pre_item_index }}/pre"><!---->
                     <div id="options">
                         <button type="submit" name="navigate" value="previous">Previous</button>
                     </div>
                 </form>
-                <form method="POST" action="/labeling/{{ next_item_index }}">
+                <form method="POST" action="/labeling/{{ next_item_index }}/next"><!---->
                     <div id="options">
                         <button type="submit" name="navigate" value="next">Next</button>
                     </div>
@@ -245,7 +245,7 @@
                             <option value={{ label.label }}>{{label.label}}</option>
                         {%endfor%}
                     </select>
-                    <input type="hidden" name="text" value={{text.id}}> <!---->
+                    <input type="hidden" name="text" value={{item_index}}> <!---->
                     <button type="submit" id="attach-button" name="attach">Attach</button>
                 </div>
             </form>

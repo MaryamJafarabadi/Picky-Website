@@ -10,7 +10,11 @@ import csv
 
 import os
 
+import random
+
 from werkzeug.utils import secure_filename
+
+from sqlalchemy import asc ###
 
 views = Blueprint('views', __name__)
 
@@ -59,24 +63,33 @@ def user():
                 db.session.commit()
                 print("successfully added!")
                 flash("successfully added!", category='success')
-    return render_template("user.html", user = current_user)
+    return render_template("user.html", user = current_user, button_pressed = False)################
 
-@views.route('/labeling/<int:item_index>', methods = ['Get', 'POST'])
+@views.route('/labeling/<int:item_index>/<string:mode>', methods = ['Get', 'POST'])
 @login_required
-def labeling(item_index):
+def labeling(item_index,mode):###
     if request.method == 'POST' and 'attach' in request.form:
-        text_id = request.form.get("text")###
-        text_instance = Text.query.get(text_id)
+        index = request.form.get("text")###
+        texts = Text.query.all()
+        #text_instance = Text.query.get(text_id)
+        index = int(index)
+        text_instance = texts[index]
+
         label = request.form.get("label")
         new_labeling_info = LabelingInfo(label = label, user_id = current_user.id, text = text_instance.context)###3
         print(new_labeling_info)
         db.session.add(new_labeling_info)
         db.session.commit()
-        next_item_index = item_index + 1
-        total_text_items = len(Text.query.all())
-        if next_item_index > total_text_items:
-            next_item_index = 1
-        return redirect(url_for('views.labeling', item_index=next_item_index))
+            
+        #texts = Text.query.all()
+        #index = [text_instance.id for text in texts].index(text_id)
+            
+        db.session.delete(text_instance)
+        db.session.commit()
+            
+        #least_count_text = Text.query.order_by(asc(Text.count)).first() ###
+        #next_item_index = least_count_text.id ###
+        return redirect(url_for('views.labeling', item_index=index+1, mode = mode)) ####+1
        # current_user.labels.append(new_labeling_info)####check if it is needed
         print("successfully attached!")
         flash("successfully attached!", category="success")
@@ -85,9 +98,26 @@ def labeling(item_index):
     texts = Text.query.all()
     print(labels)
     print(len(texts))
-    if item_index < 1 or item_index > len(texts):
-        return "Item not found", 404
-    text = texts[item_index - 1]
+    if item_index == 0:
+        item_index = random.randint(0, len(texts) - 1)
+        print(item_index, "this is randommmmm")
+            
+    #text_list = Text.query.order_by(asc(Text.count))
+    end_flag = False
+    if item_index > len(texts) - 1:
+        item_index = 0
+    if len(texts) == 0:
+        end_flag = True
+    
+    if end_flag == False:
+        print(item_index)
+        text = texts[item_index]
+    print("PPPPPPPPPPPPPPPPPPPPPPPP")
+    print(item_index)
+    if end_flag:
+        text = Text(context="all dataset is being labeled please wait for the rest of data to be uploaded.", count = 0)####
+        db.session.add(text)
+        db.session.commit()
     return render_template("labeling.html", user = current_user, labels = labels, text=text, item_index=item_index, total_items=len(texts))
 
 @views.route('/history', methods = ['Get', 'POST'])

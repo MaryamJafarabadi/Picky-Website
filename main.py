@@ -2,7 +2,7 @@ from website import create_app , db
 import csv
 from website.models import LabelingInfo , Label , Text
 import os
-from flask import request , render_template
+from flask import request , render_template , send_file ##################
 from flask_login import current_user
 
 
@@ -12,6 +12,21 @@ app = create_app()
 # Flag to track if the function has been called before
 exported_to_csv = False
 
+button_pressed = False###
+
+@app.route('/download_file', methods=['GET'])#########################33
+def download_file():
+    # Get the file path from the request or any other source
+    file_path = 'D:/internship/UI/flask/website/labeling_info.csv'#request.args.get('file_path')
+
+    # Ensure the file path is valid
+    if not file_path:
+        return "File path not provided.", 400
+
+    return send_file(file_path, as_attachment=True)
+
+import csv
+
 def export_labeling_info_to_csv():
     global exported_to_csv  # Use the global flag
     if not exported_to_csv:
@@ -19,18 +34,22 @@ def export_labeling_info_to_csv():
             labeling_info = LabelingInfo.query.all()
             print(labeling_info)
             # Path to the CSV file where you want to export the data
+            # csv_file_path = "/home/picky/mysite/website/labeling_info.csv"
             csv_file_path = 'D:/internship/UI/flask/website/labeling_info.csv'
 
             # Write data to CSV
-            with open(csv_file_path, 'a', newline='', encoding='utf-8') as file:
+            with open(csv_file_path, 'w', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
+
+                # Write column names
+                writer.writerow(["Id", "User_SId", "Text", "Label", "PublishDTO"])
 
                 # Write data rows
                 for info in labeling_info:
                     writer.writerow([info.id, info.user_id, info.text, info.label, info.date])  # Adjust the columns
 
         # Set the flag to True after the first call
-        exported_to_csv = True
+        #exported_to_csv = True
         
 @app.route('/upload_label', methods=['POST'])
 def upload_label():
@@ -52,7 +71,7 @@ def upload_label():
                 db.session.add(new_label)
                 db.session.commit()
 
-        return render_template("user.html", user = current_user)
+        return render_template("user.html", user = current_user, button_pressed = False)################
     else:
         return 'No file uploaded' 
 
@@ -72,18 +91,27 @@ def upload_text():
             csv_reader = csv.reader(file)
             for row in csv_reader:
                 data.append(row[0])
-                new_text = Text(context=row[0])
+                new_text = Text(context=row[0], count = 0)####
                 db.session.add(new_text)
                 db.session.commit()
 
-        return render_template("user.html", user = current_user)
+        return render_template("user.html", user = current_user, button_pressed = False)##########################3
     else:
         return 'No file uploaded'
+    
+@app.route('/button_pressed', methods=['GET'])###
+def handle_button_pressed():
+    print("buttom pressed     ffffffffffffffffffffff")
+    global button_pressed
+    button_pressed = True
+    export_labeling_info_to_csv()
+    button_pressed = False
+    return render_template("user.html", user = current_user, button_pressed = True)##############3
+    
+    
     
 
 if __name__ == '__main__':
     app.run()
-    print("oooooooooooooooooooooooooooo")
-    #with app.app_context():
     export_labeling_info_to_csv()  # Call the function to export to CSV after the app runs
     exported_to_csv = True

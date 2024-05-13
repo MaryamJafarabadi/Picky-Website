@@ -184,13 +184,32 @@
             <li><strong>Username:</strong> {{user.name}}</li>
             <li><strong>Email:</strong>{{ user.email }}</li>
         </ul>
-        {%if user.state == False %}
+        
         <p>What would you like to do?</p>
-        <a id="labeling" href="/labeling/1" class="btn">Attach labels</a>
+        {%if user.state == False %}
+        <a id="labeling" href="/labeling/0/next" class="btn">Attach labels</a><!---->
         <a id="history" href="/history" class="btn btn-secondary">See labeling history</a>
+        {%endif%}
+        {%if user.state == True%}
+        
+        <a id="log" class="btn" href="/button_pressed">Get Log</button>
+        
         {%endif%}
         <a id="logout" href="/login" class="btn btn-secondary">Logout</a>
     </div>
+    {%if button_pressed == True:%}
+    
+    <div class = "container">
+    <button class="btn" id="downloadButton" onclick="downloadFile('path_to_your_file.txt')">Download File</button>
+
+    <script type="text/javascript">
+        function downloadFile(filePath) {
+            window.location.href = '/download_file?file_path=' + encodeURIComponent(filePath);
+        }
+    </script>
+    </div>
+    {%endif%}
+
     {%if user.state:%}
     <!--
     <form method="POST">
@@ -204,6 +223,8 @@
         <input type="text" id="text" name="text" required>
         <button type="submit" name="submit_text">Add</button>
     </form>-->
+    <!--here i want to add the declared button-->
+
     <div class="upload-section">
         <h1>Upload Labels</h1>
         <form action="/upload_label" method="post" enctype="multipart/form-data">
@@ -219,6 +240,7 @@
             <input type="submit" value="Upload Texts" />
         </form>
       </div>
+
     {%endif%}
 </body>
 </html>
